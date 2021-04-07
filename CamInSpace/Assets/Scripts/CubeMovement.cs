@@ -22,6 +22,13 @@ public class CubeMovement : MonoBehaviour
         speed = distance / p_time;
     }
 
+    public void ChangeTime(float time){
+        float distanceToCheck = Vector3.Distance(transform.position, p_pos);
+        distance = distanceToCheck;
+        this.p_time = time;
+        speed = distance / p_time;
+    }
+
     private void Start()
     {
         cubeRenderer = GetComponent<Renderer>();

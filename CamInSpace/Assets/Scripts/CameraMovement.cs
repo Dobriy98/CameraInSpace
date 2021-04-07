@@ -11,7 +11,7 @@ public class CameraMovement : MonoBehaviour
     public bool rewind = false;
     public bool speedUp = false;
     public float speed = 4;
-    
+
     private float maxTimerValue = 60;
     private List<Vector3> positions;
 
@@ -25,10 +25,10 @@ public class CameraMovement : MonoBehaviour
         {
             if (rewind)
             {
-                 if (timer > 0)
-                 {
+                if (timer > 0)
+                {
                     timer -= Time.deltaTime;
-                 }
+                }
             }
             else if (speedUp)
             {
@@ -46,22 +46,20 @@ public class CameraMovement : MonoBehaviour
             }
 
             timerText.text = timer.ToString("0.0");
+
+            if (rewind)
+            {
+                Rewind();
+            }
+            else
+            {
+                Record();
+            }
+
             if (timer < maxTimerValue && !rewind)
             {
                 transform.position += new Vector3(0, 0, speed * Time.deltaTime);
             }
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (rewind)
-        {
-            Rewind();
-        }
-        else
-        {
-            Record();
         }
     }
 
@@ -76,7 +74,7 @@ public class CameraMovement : MonoBehaviour
 
     private void Record()
     {
-        if (transform.position.z > 0 && timer < maxTimerValue)
+        if (transform.position.z >= 0 && timer < maxTimerValue)
         {
             positions.Insert(0, transform.position);
         }

@@ -39,7 +39,9 @@ public class Point : MonoBehaviour
         #endregion
 
         GameObject cube = Instantiate(pref, pos, p_rot);
-        cube.transform.LookAt(p_pos, Vector3.up);
+        if(p_rot == Quaternion.identity){
+            cube.transform.LookAt(p_pos, Vector3.up);
+        }
         cube.GetComponent<CubeMovement>().Initialization(p_pos,p_time);
     }
 
