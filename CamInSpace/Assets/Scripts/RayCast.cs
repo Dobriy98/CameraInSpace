@@ -11,7 +11,7 @@ public class RayCast : MonoBehaviour
     [SerializeField] private Button buttonToChangePoint;
     void Update()
     {
-        if(Input.GetMouseButtonUp(0) && !ButtonController.instance.pause){
+        if(Input.GetMouseButtonUp(0)){
             if (EventSystem.current.IsPointerOverGameObject()){
             return;
         }
@@ -22,7 +22,7 @@ public class RayCast : MonoBehaviour
             ray.direction = -ray.direction;
             
             if(Physics.Raycast(ray,out hit)){
-                if(hit.transform.name == "ColliderToCheck"){
+                if(hit.transform.name == "ColliderToCheck" && !ButtonController.instance.pause){
                     Point p = new Point(hit.point);
                     p.CreateCube(cubeToSpawn, transform.position);
                 }

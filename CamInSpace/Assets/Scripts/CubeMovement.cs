@@ -1,18 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CubeMovement : MonoBehaviour
 {
     public bool canMove = true;
     public float speed;
 
+    public bool isRewinding = false;
+    public bool isSpeedUp = false;
+
     private Vector3 p_pos;
     private float p_time;
     private float distance = 10;
     private Renderer cubeRenderer;
-    public bool isRewinding = false;
-    public bool isSpeedUp = false;
+    private Text timer;
+    private float timeToMove;
 
     private List<Vector3> positions;
     public void Initialization(Vector3 p_pos, float p_time)
@@ -22,22 +26,26 @@ public class CubeMovement : MonoBehaviour
         speed = distance / p_time;
     }
 
-    public void ChangeTime(float time){
+    public void ChangeTime(float time)
+    {
         float distanceToCheck = Vector3.Distance(transform.position, p_pos);
-        distance = distanceToCheck;
         this.p_time = time;
-        speed = distance / p_time;
+        speed = distanceToCheck / p_time;
     }
-
     private void Start()
     {
+        timer = GameObject.Find("TimerText").GetComponent<Text>();
         cubeRenderer = GetComponent<Renderer>();
+
+        timeToMove = float.Parse(timer.text);
+
         positions = new List<Vector3>();
+        positions.Insert(0, transform.position);
     }
 
     void Update()
     {
-        if (canMove && !isRewinding)
+        if (canMove && !isRewinding && !ButtonController.instance.pause)
         {
             float step;
             if (isSpeedUp)
@@ -49,8 +57,10 @@ public class CubeMovement : MonoBehaviour
                 step = speed * Time.deltaTime;
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, p_pos, step);
             float distanceToCheck = Vector3.Distance(transform.position, p_pos);
+            if(float.Parse(timer.text) >= timeToMove){
+                transform.position = Vector3.MoveTowards(transform.position, p_pos, step);
+            }   
 
             if (distanceToCheck <= 0)
             {
@@ -58,17 +68,15 @@ public class CubeMovement : MonoBehaviour
                 canMove = false;
             }
         }
-    }
-    private void FixedUpdate()
-    {
+
         if (isRewinding)
         {
+            Rewind();
             float distanceToCheck = Vector3.Distance(transform.position, p_pos);
             if (distanceToCheck > 0)
             {
                 cubeRenderer.material.color = Color.white;
             }
-            Rewind();
         }
         else
         {

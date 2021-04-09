@@ -26,6 +26,7 @@ public class Rewind : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         for (int i = 0; i < cubeArray.Length; i++)
         {
             cubeArray[i].isRewinding = true;
+            cubeArray[i].canMove = false;
         }
         flag = false;
     }
@@ -39,7 +40,6 @@ public class Rewind : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         {
             cubeArray[i].isRewinding = false;
             cubeArray[i].canMove = true;
-
         }
         flag = false;
     }
